@@ -2,7 +2,34 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+using namespace std;
+class Student {
+public:
+	int rollNo;
+	string name;
+	int age;
 
+	Student(const string s, const int r, const int a): name(s), rollNo(r), age(a){}
+
+	bool operator==(const Student& obj) const {
+		return rollNo == obj.rollNo;
+	}
+
+	bool operator< (const Student& obj) const {
+		return rollNo < obj.rollNo;
+	}
+
+};
+
+namespace std {
+	template<>
+	struct hash<Student> {
+		int operator()(const Student& key) const{
+			return hash<int>() (key.rollNo);
+		}
+	};
+};
+ 
 int main() {
 
 	std::vector<int> arr{ 1, 3, 3, 2, 3, 4, 1, 3 }; // uniform initialization c++11
@@ -50,6 +77,17 @@ int main() {
 		std::cout << key << " " << value << '\n';
 	}
 
+	unordered_map<Student, int> markMap;
+	Student obj1("Anupam", 21, 27);
+	Student obj2("Rishabh", 32, 27);
+	markMap.insert({ obj1,420 });
+	markMap.insert({ obj2,450 });
+
+
+	for (auto& [student, mark] : markMap) {
+		cout << "Name : " << student.name << "\tAge : " << student.age << "\tRollNo: " << student.rollNo <<
+			"\tMark : " << mark << '\n';
+	}
 	
 
 	return 0;
